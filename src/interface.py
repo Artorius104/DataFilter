@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk,simpledialog
 
-from tab import Tab
+from src.components.tab import Tab
 
 
 

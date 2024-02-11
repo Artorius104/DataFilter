@@ -1,12 +1,11 @@
 import csv
 import json
-from file_loader import load_csv, load_json, load_xml, load_yaml
-from file_saver import save_csv, save_json, save_xml, save_yaml
-from utils import str_type, get_file_type, sum_ord, get_column_types
+from file_system.file_loader import load_csv, load_json, load_xml, load_yaml
+from file_system.file_saver import save_csv, save_json, save_xml, save_yaml
+from src.utils.utils import str_type, get_file_type, sum_ord, get_column_types
 
 class Tab:
     def __init__(self):
-
         self.file_path = None
         self.data = None # Liste des dicts
         self.columns = None # Liste des colonnes
@@ -27,12 +26,9 @@ class Tab:
 
     def show(self):
         data_dict = self.data 
-        columns = self.columns
-        
+        columns = self.columns 
         cell_width = 12
-        
         header = "|".join(column.center(cell_width) for column in columns)
-        
         print(header)
         print("-" * len(header))
         
@@ -78,7 +74,6 @@ class Tab:
             data = load_xml(file_path)
         elif file_type == 'yaml' or file_type == 'yml':
             data = load_yaml(file_path)
-
         else:
             print(f"{file_type} is not supported")
 
@@ -87,8 +82,6 @@ class Tab:
                     
         self.data = data
                 
-
-
     
     # def add_line(self, **kwargs):
     #     if not all(key in self.columns for key in kwargs.keys()):
@@ -104,11 +97,8 @@ class Tab:
     #     return self
         
 
-    
     # def add_columns(self,*new_columns):
-
     #     new_columns = lis(set(new_columns)-set(self.columns))
-        
     #     self.columns += new_columns
         
     #     for i in range (0,self.size):
@@ -120,7 +110,6 @@ class Tab:
         
 
     # def remove_columns(self,*columns):
-
     #     columns = list(set(columns)&set(self.columns))
 
     #     for column in columns:
@@ -130,6 +119,7 @@ class Tab:
     #         for column in columns:
     #             self.data[i].pop(column)
     #     return self
+
 
     def convert_column_type(self, column, type):
         if(type=="int"):

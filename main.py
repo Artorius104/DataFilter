@@ -1,3 +1,3 @@
-from interface import launch
+from src.interface import launch
 
 launch()
