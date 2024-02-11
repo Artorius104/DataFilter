@@ -1,5 +1,6 @@
 import csv
 import json
+import yaml
 import xml.etree.ElementTree as ET
 from itertools import zip_longest
 
@@ -36,14 +37,17 @@ def load_json(path):
         
     return data
 
+def load_yaml(path):
+    with open(path, 'r') as file_yaml:
+        data = yaml.safe_load(file_yaml)
+
+    return data
+
 def create_datadict_from_xml(unstructured_data, tag_list):
     data = []
     save = []
     for elem in zip_longest(*unstructured_data):
         save.append(elem)
-    # print(save)
-    # print(tag_list)
-    # print(save[0][0])
 
     for elem in save:
         new_dict = {}
@@ -84,4 +88,5 @@ def load_xml(path):
 
     return data
 
-load_xml("data/xml/titanic.xml")
+data = load_yaml("data/yaml/example.yaml")
+print(data)

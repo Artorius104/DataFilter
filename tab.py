@@ -1,6 +1,8 @@
 import csv
 import json
-from utils import load_csv, save_csv, save_json, load_json, str_type, get_file_type, sum_ord, get_column_types
+from file_loader import load_csv, load_json, load_xml, load_yaml
+from file_saver import save_csv, save_json
+from utils import str_type, get_file_type, sum_ord, get_column_types
 
 class Tab:
     def __init__(self):
@@ -73,7 +75,7 @@ class Tab:
             data = load_json(file_path)
         elif file_type == 'xml':
             data = load_xml(file_path)
-        elif file_type == 'yaml':
+        elif file_type == 'yaml' or file_type == 'yml':
             data = load_yaml(file_path)
 
             
