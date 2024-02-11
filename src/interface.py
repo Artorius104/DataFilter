@@ -3,8 +3,6 @@ from tkinter import ttk,simpledialog
 
 from src.components.tab import Tab
 
-
-
 def transform_table():
     # Logique pour transformer la table
     print("Transformer la table")
@@ -62,17 +60,14 @@ def save_table(tab):
     
     button_save.grid(row=3, column=0, columnspan=2, pady=10)
     
-
     root.mainloop()
-
 
 
 # Fonction bouton load new table de la table
 def load_table(c_tab=None):
-
     #New tab
     tab = Tab()
-    
+  
     #List of modifications
     modifications = [tab]
     
@@ -88,9 +83,9 @@ def load_table(c_tab=None):
     #tab copy
     original_tab = tab
     
-
     root = tk.Tk()
     root.title(tab.file_path)
+
 
     def reset(tab):
         modifications.append(tab)
@@ -104,6 +99,7 @@ def load_table(c_tab=None):
             
         tab = original_tab
 
+
     # Fonction bouton filter de la table
     def filter_table(tab):
         # def reset(tab):
@@ -116,7 +112,6 @@ def load_table(c_tab=None):
             
         def apply_filter(tab):
             # modifications.append(tab)
-            
             for item in tree.get_children():
                 tree.delete(item)
             
@@ -141,18 +136,15 @@ def load_table(c_tab=None):
         root = tk.Tk()
         root.title("Filter")
         
-        
         # variables
         variable_column = tk.StringVar(root)
         variable_filter = tk.StringVar(root)
         variable_value = tk.StringVar(root)
         
-    
         # Menu déroulant colonnes
         label_column = ttk.Label(root, text="Column")
         tmp = [""]+tab.columns
         menu_column = ttk.OptionMenu(root, variable_column, *tmp)
-    
     
         label_column.grid(row=0, column=0, padx=10, pady=5, sticky="e")
         menu_column.grid(row=0, column=1, padx=10, pady=5)
@@ -175,16 +167,13 @@ def load_table(c_tab=None):
         button_filter = ttk.Button(root, text="Filter", command=lambda : apply_filter(tab))
         button_filter.grid(row=3, column=0, columnspan=2, pady=10)
 
-
         # # Bouton reset
         # button_reset = ttk.Button(root, text="Reset", command=lambda : reset(tab))
         # button_reset.grid(row=3, column=2, columnspan=2, pady=10)
         # root.mainloop()
 
-    
 
     def sort_table(tab):
-
         # Effacer le tableau (tree)
         user_input = simpledialog.askstring("Sort table", "On :")
         
@@ -197,7 +186,6 @@ def load_table(c_tab=None):
         for item in sorted_tab.data:
             values = [item[col] for col in columns]
             tree.insert("", "end", values=values)
-
         
     button_load = ttk.Button(root, text="Load new table", command=load_table)
     button_transform = ttk.Button(root, text="Transform table", command=transform_table)
@@ -206,7 +194,6 @@ def load_table(c_tab=None):
     button_sort_table = ttk.Button(root, text="Sort Table", command=lambda: sort_table(tab))
     button_reset = ttk.Button(root, text="Reset", command=lambda : reset(tab))
         
-
     button_load.grid(row=0, column=1)
     button_transform.grid(row=0, column=2)
     button_filter.grid(row=0, column=3)
@@ -220,31 +207,27 @@ def load_table(c_tab=None):
     # scroll barre
     horizontal_scrollbar = ttk.Scrollbar(root, orient="horizontal", command=tree.xview)
     tree.configure(xscrollcommand=horizontal_scrollbar.set)
-        
-        
+       
     # les colonnes
     columns = tab.columns
     tree["columns"] = columns
-        
+
     for col in columns:
         tree.column(col, anchor="center")
         tree.heading(col, text=col, anchor="center")
-        
+
     # les lignes
     for item in tab.data:
         values = [item[col] for col in columns]
         tree.insert("", "end", values=values)
-        
+
     # treeview config
     tree.grid(row=1, column=0, columnspan=10, padx=10, pady=10, sticky="nsew")
     horizontal_scrollbar.grid(row=2, column=0, columnspan=4, sticky="ew")
     
-    
-    
     # truc de redimenssionnement
     root.columnconfigure(0, weight=1)
     root.rowconfigure(1, weight=1)
-        
 
     root.mainloop()
 
@@ -261,6 +244,5 @@ def launch():
     
     button = ttk.Button(root, text="Load table", command=load_table)
     button.pack(padx=10, pady=10)
-
 
     root.mainloop()
