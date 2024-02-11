@@ -1,7 +1,7 @@
 import csv
 import json
 from file_loader import load_csv, load_json, load_xml, load_yaml
-from file_saver import save_csv, save_json
+from file_saver import save_csv, save_json, save_xml, save_yaml
 from utils import str_type, get_file_type, sum_ord, get_column_types
 
 class Tab:
@@ -20,8 +20,10 @@ class Tab:
     def print_size(self):
         print(self.size)
 
+
     # def print_columns_type(self):
     #     print(self.columns_type)
+
 
     def show(self):
         data_dict = self.data 
@@ -39,38 +41,37 @@ class Tab:
 
             for column in columns:
                 cell_value = str(line[column])
-                                 
+                             
                 if(len(cell_value)>cell_width):
                     cell_value = cell_value[:cell_width-3]+"..."
     
                 cell_value = cell_value.ljust(cell_width)
                 list_cell_values.append(cell_value)
                     
-            row ="|".join(list_cell_values)
-            
+            row ="|".join(list_cell_values)         
             print(row)
-
-
     
-    
-    def save(self,filename,path,file_type):
+
+    def save(self, filename, path, file_type):
         filename=f"{filename}.{file_type}"
         
         if file_type == 'csv':
-            save_csv(self.data,path,filename)
-
+            save_csv(self.data, path, filename)
         elif file_type == 'json':
-            save_json(self.data,path,filename)
+            save_json(self.data, path, filename)
+        elif file_type == 'xml':
+            save_xml(self.data, path, filename)
+        elif file_type == 'yaml' or file_type == 'yml':
+            save_yaml(self.data, path, filename)
 
     
-    def load(self,file_path): # Load un nouveau Tab depuis in fichier
+    def load(self, file_path): # Load un nouveau Tab depuis in fichier
         self.file_path = file_path
 
         file_type = get_file_type(file_path)
         
         if(file_type == 'csv'):
             data = load_csv(file_path)
-
         elif file_type == 'json':
             data = load_json(file_path)
         elif file_type == 'xml':
@@ -78,11 +79,9 @@ class Tab:
         elif file_type == 'yaml' or file_type == 'yml':
             data = load_yaml(file_path)
 
-            
         else:
             print(f"{file_type} is not supported")
 
-        
         self.columns_type = get_column_types(data)
         self.columns = list(self.columns_type.keys())
                     
@@ -182,8 +181,7 @@ class Tab:
                 value = row[column]
                 
                 try:
-                    if type == "int" or type == "float":
-                        
+                    if type == "int" or type == "float":    
                         if(value < stats[column]["Min"]):
                             stats[column]["Min"]= value    
     
@@ -192,34 +190,28 @@ class Tab:
     
                         stats[column]["Mean"] += value
                         
-        
-                    if type == "str" and value!=None:
-                        
+                    if type == "str" and value!=None:    
                         if(len(value) < len(stats[column]["Min"])):
-                            stats[column]["Min"]= value    
-    
+                            stats[column]["Min"]= value
                         if(len(value) > len(stats[column]["Max"])):
                             stats[column]["Max"]= value
                         
                         stats[column]["Most Frequent"].append(value)
-
                 except TypeError:
                     pass
                     
         for column,type in self.columns_type.items():
             if type == "int" or type == "float":
-                stats[column]["Mean"] = round(stats[column]["Mean"]/count,2)
-                
+                stats[column]["Mean"] = round(stats[column]["Mean"] / count, 2)         
             if type == "str":
                 list = stats[column]["Most Frequent"]
-                stats[column]["Most Frequent"] = max(set(list),key=list.count)
+                stats[column]["Most Frequent"] = max(set(list), key=list.count)
 
         print(json.dumps(stats, indent=4))
 
 
     
-    def sort(self,column,reverse=False):
-        
+    def sort(self, column, reverse=False):   
         infini = float('inf')
         if reverse:
             infini = float('-inf')
@@ -230,31 +222,26 @@ class Tab:
             
         # elif (int in self.columns_type[column] or float in self.columns_type[column]):  
         #     self.data = sorted(self.data,key=lambda x: x[column] if x[column] is not None else infini, reverse = reverse)
-
-        
-            
+      
         return self
 
     
-
-    def filter(self,column,rel,value):
+    def filter(self, column, rel, value):
         print("HHHHHHHHHHHHHHHHEEEYYYY")
         
         sub_tab = Tab()
-        
         sub_tab.columns = self.columns
         sub_tab.columns_type = self.columns_type
         sub_tab.data = []
-
         
-        if(int in self.columns_type[column] or float in self.columns_type[column]):
-            if(rel=="IS EQUAL"):
+        if int in self.columns_type[column] or float in self.columns_type[column]:
+            if rel == "IS EQUAL":
                 for row in self.data:
                     # print(row[column])
                     if(row[column] == value):
                         sub_tab.data.append(row)
     
-            if(rel=="IS GREATER THAN"):
+            if rel == "IS GREATER THAN":
                 
                 for row in self.data:
                     try:
@@ -263,7 +250,7 @@ class Tab:
                     except TypeError:
                         pass
     
-            if(rel=="IS GREATER THAN OR EQUAL"):
+            if rel == "IS GREATER THAN OR EQUAL":
                 for row in self.data:
                     try:
                         if(row[column] >= value):
@@ -271,7 +258,7 @@ class Tab:
                     except TypeError:
                         pass
     
-            if(rel=="IS LESS THAN"):
+            if rel == "IS LESS THAN":
                 for row in self.data:
                     try:
                         if(row[column] < value):
@@ -279,7 +266,7 @@ class Tab:
                     except TypeError:
                         pass
                         
-            if(rel=="IS LESS THAN OR EQUAL"):
+            if rel == "IS LESS THAN OR EQUAL":
                 for row in self.data:
                     try:
                         if(row[column] <= value):
@@ -287,14 +274,14 @@ class Tab:
                     except TypeError:
                         pass
 
-        elif(str in self.columns_type[column]):
-            if(rel=="IS EQUAL"):
+        elif str in self.columns_type[column]:
+            if rel == "IS EQUAL":
                 
                 for row in self.data:
                     if(row[column] == value):
                         sub_tab.data.append(row)
     
-            if(rel=="IS GREATER THAN"):
+            if rel == "IS GREATER THAN":
                 for row in self.data:
                     try:
                         if(sum_ord(row[column]) > value):
@@ -302,7 +289,7 @@ class Tab:
                     except TypeError:
                         pass
     
-            if(rel=="IS GREATER OR EQUAL THAN"):
+            if rel == "IS GREATER OR EQUAL THAN":
                 for row in self.data:
                     try:
                         if(sum_ord(row[column]) >= value):
@@ -310,7 +297,7 @@ class Tab:
                     except TypeError:
                         pass
     
-            if(rel=="IS LESS THAN"):
+            if rel == "IS LESS THAN":
                 for row in self.data:
                     try:
                         if(sum_ord(row[column]) < value):
@@ -318,12 +305,12 @@ class Tab:
                     except TypeError:
                         pass
                         
-            if(rel=="IS LESS OR EQUAL THAN"):
+            if rel == "IS LESS OR EQUAL THAN":
                 for row in self.data:
                     try:
                         if(sum_ord(row[column]) <= value):
                             sub_tab.data.append(row)
                     except TypeError:
                         pass       
-                    
+  
         return sub_tab
