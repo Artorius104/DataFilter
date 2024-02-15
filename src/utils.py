@@ -39,6 +39,7 @@ def list_type_columns(data):
         for key, value in line.items():
             if value[0] == '[' and value[-1] == ']':
                 columns.append(key)
+    columns = set(columns)
     
     return columns
 
@@ -51,5 +52,6 @@ def bool_type_columns(data):
         for key, value in line.items():
             if value.lower() == 'true' or value.lower() == 'false':
                 columns.append(key)
+    columns = set(columns)
 
     return columns
