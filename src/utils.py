@@ -1,3 +1,5 @@
+from file_loader import load_csv
+
 def str_type(chaine):
     if chaine.isdigit():
         return "int"
@@ -37,10 +39,11 @@ def list_type_columns(data):
         return columns
     for line in data:
         for key, value in line.items():
-            if value[0] == '[' and value[-1] == ']':
-                columns.append(key)
-    columns = set(columns)
-    
+            if value and type(value) == str:
+                if value[0] == '[' and value[-1] == ']':
+                    columns.append(key)
+    columns = list(set(columns))
+
     return columns
 
 
@@ -50,8 +53,19 @@ def bool_type_columns(data):
         return columns
     for line in data:
         for key, value in line.items():
-            if value.lower() == 'true' or value.lower() == 'false':
-                columns.append(key)
-    columns = set(columns)
+            if value and type(value) == str:
+                if value.lower() == 'true' or value.lower() == 'false':
+                    columns.append(key)
+    columns = list(set(columns))
 
     return columns
+
+
+# if __name__ == "__main__":
+#     # data = load_csv("data/csv/titanic.csv")
+#     data = load_csv("data/csv/test_list_bool.csv")
+#     print("================================")
+#     # res = bool_type_columns(data)
+#     res = list_type_columns(data)
+#     print("================================")
+#     print(res)

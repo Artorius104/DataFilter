@@ -87,6 +87,3 @@ def load_xml(path):
     data = parse_xml_data(root, tag_list)
 
     return data
-
-data = load_yaml("data/yaml/example.yaml")
-print(data)
