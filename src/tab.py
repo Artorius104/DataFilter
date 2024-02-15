@@ -339,15 +339,6 @@ class Tab:
         return sub_tab
     
 
-def list_type_columns(data):
-    pass
-
-
-def bool_type_columns(data):
-    for column in data:
-        print(column)
-
-
-if __name__ == "__main__":
-    data = load_csv("data/csv/titanic.csv")
-    bool_type_columns(data)
+# if __name__ == "__main__":
+#     data = load_csv("data/csv/titanic.csv")
+#     bool_type_columns(data)

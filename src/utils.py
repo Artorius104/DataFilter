@@ -30,3 +30,26 @@ def get_column_types(data_list):
                 column_types[key].add(current_type)
 
     return column_types
+
+def list_type_columns(data):
+    columns = []
+    if not data:
+        return columns
+    for line in data:
+        for key, value in line.items():
+            if value[0] == '[' and value[-1] == ']':
+                columns.append(key)
+    
+    return columns
+
+
+def bool_type_columns(data):
+    columns = []
+    if not data:
+        return columns
+    for line in data:
+        for key, value in line.items():
+            if value.lower() == 'true' or value.lower() == 'false':
+                columns.append(key)
+
+    return columns
