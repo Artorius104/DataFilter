@@ -43,47 +43,28 @@ def load_yaml(path):
 
     return data
 
-def create_datadict_from_xml(unstructured_data, tag_list):
+def get_xml_data_from_file(main_elem):
     data = []
-    save = []
-    for elem in zip_longest(*unstructured_data):
-        save.append(elem)
+    if len(main_elem) <= 0:
+        data_dict = {}
+        for child in main_elem.iter():
+            data_dict[child.tag] = child.text
+        data.append(data_dict)
+        return data
 
-    for elem in save:
-        new_dict = {}
-        index = 0
-        for key in tag_list:
-            new_dict[key] = elem[index]
-            index += 1
-        data.append(new_dict)
-
-    return data
-
-def parse_xml_data(root, tag_list):
-    unstructured_data = []
-    for tag in tag_list:
-        container = []
-        for elem in root.iter(tag):
-            container.append(elem.text)
-        unstructured_data.append(container)
-    
-    data = create_datadict_from_xml(unstructured_data, tag_list)
+    for child in main_elem:
+        data_dict = {}
+        for elem in child.iter():
+            if elem.tag != child.tag:
+                data_dict[elem.tag] = elem.text
+        data.append(data_dict)
 
     return data
-
-def get_all_xml_tags(root):
-    root_tag = root.tag
-    get_all_tags = set([elem.tag for elem in root.iter()])
-    tag_list = list(get_all_tags)
-    tag_list.remove(root_tag)
-
-    return tag_list
 
 def load_xml(path):
     tree = ET.parse(path)
     root = tree.getroot()
-    tag_list = get_all_xml_tags(root)
 
-    data = parse_xml_data(root, tag_list)
+    data = get_xml_data_from_file(root)
 
     return data

@@ -59,13 +59,3 @@ def bool_type_columns(data):
     columns = list(set(columns))
 
     return columns
-
-
-# if __name__ == "__main__":
-#     # data = load_csv("data/csv/titanic.csv")
-#     data = load_csv("data/csv/test_list_bool.csv")
-#     print("================================")
-#     # res = bool_type_columns(data)
-#     res = list_type_columns(data)
-#     print("================================")
-#     print(res)
