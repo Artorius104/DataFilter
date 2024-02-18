@@ -2,6 +2,8 @@ import csv
 import json
 import yaml
 
+import xml.etree.ElementTree as ET
+
 def save_csv(dict_data, path, filename):
     
     with open(f"{path}/{filename}", mode='w', newline='') as file_csv:
@@ -29,5 +31,16 @@ def save_yaml(dict_data, path, filename):
     print(f"Les données ont été enregistrées dans {path}.")
 
 def save_xml(dict_data, path, filename):
-    print("WORK IN PROGRESS...")
-    # print(f"Les données ont été enregistrées dans {path}.")
+    data = ET.Element("data")
+    for line in dict_data:
+        child = ET.SubElement(data, "child")
+        for key, value in line.items():
+            sub_child = ET.SubElement(child, key)
+            sub_child.text = str(value)
+
+    tree = ET.ElementTree(data)
+    with open(f"{path}/{filename}", "wb") as file_xml:
+        tree.write(file_xml)
+    print(f"Les données ont été enregistrées dans {path}.")
+
+    
